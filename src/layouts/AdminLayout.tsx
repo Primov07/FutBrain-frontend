@@ -1,69 +1,85 @@
 import React from 'react';
-import { NavLink, Outlet, Link } from 'react-router-dom';
+import { Outlet, Link, useLocation } from 'react-router-dom';
 import '../styles/admin.css';
+import { useAuth } from '../auth/AuthContext';
+import { BASE_URL } from '../pages';
 
 const AdminLayout: React.FC = () => {
+  const { user } = useAuth();
+  const location = useLocation();
+  const [isSidebarActive, setIsSidebarActive] = React.useState(false);
+
+  const closeSidebar = () => setIsSidebarActive(false);
+
+  const isActive = (path: string) => location.pathname === path ? 'active' : '';
+
   return (
     <div className="admin-body">
       <div className="admin-wrapper">
-        <aside className="admin-sidebar">
+        <aside className={`admin-sidebar ${isSidebarActive ? 'sidebar-active' : ''}`}>
           <div className="sidebar-header">
-            <img src="/img/logo.png" alt="FutBrain лого" />
-            <span>Админ панел</span>
+            <div className="sidebar-logo-container">
+              <img src="/img/logo.png" alt="FutBrain лого" />
+              <span>Админ панел</span>
+            </div>
+            <button className="sidebar-close" onClick={closeSidebar}>
+              <i className="fas fa-times"></i>
+            </button>
           </div>
           <nav className="sidebar-nav">
             <ul>
               <li>
-                <NavLink to="/admin" end className={({ isActive }) => isActive ? 'active' : ''}>
+                <Link to="/admin" className={isActive('/admin')} onClick={closeSidebar}>
                   <i className="fas fa-chart-line"></i> Табло
-                </NavLink>
+                </Link>
               </li>
               <li>
-                <NavLink to="/admin/users" className={({ isActive }) => isActive ? 'active' : ''}>
+                <Link to="/admin/users" className={isActive('/admin/users')} onClick={closeSidebar}>
                   <i className="fas fa-users"></i> Потребители
-                </NavLink>
+                </Link>
               </li>
               <li>
-                <NavLink to="/admin/posts" className={({ isActive }) => isActive ? 'active' : ''}>
+                <Link to="/admin/posts" className={isActive('/admin/posts')} onClick={closeSidebar}>
                   <i className="fas fa-file-alt"></i> Публикации
-                </NavLink>
+                </Link>
               </li>
               <li>
-                <NavLink to="/admin/players" className={({ isActive }) => isActive ? 'active' : ''}>
+                <Link to="/admin/players" className={isActive('/admin/players')} onClick={closeSidebar}>
                   <i className="fas fa-running"></i> Играчи
-                </NavLink>
+                </Link>
               </li>
               <li>
-                <NavLink to="/admin/comments" className={({ isActive }) => isActive ? 'active' : ''}>
-                  <i className="fas fa-comments"></i> Коментари
-                </NavLink>
-              </li>
-              <li>
-                <NavLink to="/admin/replies" className={({ isActive }) => isActive ? 'active' : ''}>
-                  <i className="fas fa-reply-all"></i> Отговори
-                </NavLink>
-              </li>
-              <li>
-                <NavLink to="/admin/accessories" className={({ isActive }) => isActive ? 'active' : ''}>
+                <Link to="/admin/accessories" className={isActive('/admin/accessories')} onClick={closeSidebar}>
                   <i className="fas fa-store"></i> Аксесоари
-                </NavLink>
+                </Link>
+              </li>
+              <li>
+                <Link to="/admin/game" className={isActive('/admin/game')} onClick={closeSidebar}>
+                  <i className="fas fa-trophy"></i> Управление на играта
+                </Link>
+              </li>
+              <li>
+                <Link to="/admin/reports" className={isActive('/admin/reports')} onClick={closeSidebar}>
+                  <i className="fas fa-exclamation-circle"></i> Доклади
+                </Link>
               </li>
             </ul>
           </nav>
           <div className="sidebar-footer">
-            <Link to="/"><i className="fas fa-sign-out-alt"></i> Към сайта</Link>
+            <Link to="/" onClick={closeSidebar}><i className="fas fa-sign-out-alt"></i> Към сайта</Link>
           </div>
         </aside>
 
         <main className="admin-main">
           <header className="admin-header">
-            <div className="header-search">
-              <i className="fas fa-search"></i>
-              <input type="text" placeholder="Търси данни..." />
+            <div className="header-left">
+              <button className="sidebar-toggle" onClick={() => setIsSidebarActive(true)}>
+                <i className="fas fa-bars"></i>
+              </button>
             </div>
             <div className="admin-profile">
-              <span>Добре дошли, <strong>администратор</strong></span>
-              <img src="/img/logo.png" alt="Админ" className="admin-avatar" />
+              <span className="desktop-only">Добре дошли, <strong>{ user?.username}</strong></span>
+              <img src={user?.pictureURL?.startsWith('http') ? user.pictureURL : `${BASE_URL}/user.png`} alt="Админ" className="admin-avatar" />
             </div>
           </header>
 
@@ -72,6 +88,7 @@ const AdminLayout: React.FC = () => {
           </div>
         </main>
       </div>
+      {isSidebarActive && <div className="sidebar-overlay" onClick={closeSidebar}></div>}
     </div>
   );
 };

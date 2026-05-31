@@ -4,34 +4,54 @@ import { BASE_URL } from ".";
 
 const playersUrl = `${BASE_URL}/players/count`;
 const usersUrl = `${BASE_URL}/users/count`;
+const postsCountUrl = `${BASE_URL}/posts/count`;
+const reportsCountUrl = `${BASE_URL}/reports/count`;
 
 const AdminDashboard: React.FC = () => {
 	const [usersCount, setUsersCount] = React.useState<number>(0);
 	const [playersCount, setPlayersCount] = React.useState<number>(0);
+	const [postsCount, setPostsCount] = React.useState<number>(0);
+	const [reportsCount, setReportsCount] = React.useState<number>(0);
 
 	React.useEffect(() => {
-    fetch(playersUrl, {
-      credentials: "include"
-    })
+		fetch(playersUrl, {
+			credentials: "include",
+		})
 			.then((response) => response.json())
 			.then((data) => setPlayersCount(data.count))
 			.catch((err) => console.error(err));
 
-    fetch(usersUrl, {
-      credentials: "include"
-    })
+		fetch(usersUrl, {
+			credentials: "include",
+		})
 			.then((response) => response.json())
 			.then((data) => {
 				setUsersCount(data.count);
 			})
 			.catch((err) => console.error(err));
-	}, []);
 
-	console.log(playersCount);
-	console.log(usersCount);
+		fetch(postsCountUrl, {
+			credentials: "include",
+		})
+			.then((response) => response.json())
+			.then((data) => {
+				setPostsCount(data.count);
+			})
+			.catch((err) => console.error(err));
+
+		fetch(reportsCountUrl, {
+			credentials: "include",
+		})
+			.then((response) => response.json())
+			.then((data) => {
+				setReportsCount(data.count);
+			})
+			.catch((err) => console.error(err));
+	}, []);
 
 	return (
 		<>
+			<title> FutBrain - Admin Panel </title>
 			<h1>Общ преглед на системата</h1>
 			<p className="admin-welcome-text">
 				Добре дошли в административния панел на FutBrain. Тук можете да
@@ -54,7 +74,7 @@ const AdminDashboard: React.FC = () => {
 						<i className="fas fa-paper-plane"></i>
 					</div>
 					<div className="stat-info">
-						<h3>853</h3>
+						<h3>{postsCount}</h3>
 						<p>Публикации</p>
 					</div>
 				</div>
@@ -72,7 +92,7 @@ const AdminDashboard: React.FC = () => {
 						<i className="fas fa-exclamation-triangle"></i>
 					</div>
 					<div className="stat-info">
-						<h3>12</h3>
+						<h3>{reportsCount}</h3>
 						<p>Чакащи доклади</p>
 					</div>
 				</div>

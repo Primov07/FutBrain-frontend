@@ -8,9 +8,8 @@ import AdminUsers from "./pages/AdminUsers";
 import AdminPosts from "./pages/AdminPosts";
 import AdminPlayers from "./pages/AdminPlayers";
 import AdminPlayerUpdate from "./pages/AdminPlayerUpdate";
-import AdminComments from "./pages/AdminComments";
-import AdminReplies from "./pages/AdminReplies";
 import AdminAccessories from "./pages/AdminAccessories";
+import AdminGame from "./pages/AdminGame";
 import AdminAccessoryAdd from "./pages/AdminAccessoryAdd";
 import AdminAccessoryUpdate from "./pages/AdminAccessoryUpdate";
 import Register from "./pages/Register";
@@ -22,7 +21,12 @@ import Rankings from "./pages/Rankings";
 import Contacts from "./pages/Contacts";
 import Profile from "./pages/Profile";
 import PostAdd from "./pages/PostAdd";
+import Post from "./pages/Post";
+import PostUpdate from "./pages/PostUpdate";
 import ProtectedRoute from "./auth/ProtectedRoute";
+import ReportAdd from "./pages/ReportAdd";
+import AdminReports from "./pages/AdminReports";
+import AdminReport from "./pages/AdminReport";
 
 function App() {
 	return (
@@ -56,6 +60,26 @@ function App() {
 					element={
 						<ProtectedRoute isAdmin={false}>
 							<PostAdd />
+						</ProtectedRoute>
+					}
+				/>
+				<Route
+					path="post/:id"
+					element={<Post />}
+				/>
+				<Route
+					path="post/update/:id"
+					element={
+						<ProtectedRoute isAdmin={false}>
+							<PostUpdate />
+						</ProtectedRoute>
+					}
+				/>
+				<Route
+					path="report/:targetId"
+					element={
+						<ProtectedRoute isAdmin={false}>
+							<ReportAdd />
 						</ProtectedRoute>
 					}
 				/>
@@ -110,14 +134,6 @@ function App() {
 					element={<AdminPlayerUpdate />}
 				/>
 				<Route
-					path="comments"
-					element={<AdminComments />}
-				/>
-				<Route
-					path="replies"
-					element={<AdminReplies />}
-				/>
-				<Route
 					path="accessories"
 					element={<AdminAccessories />}
 				/>
@@ -128,6 +144,18 @@ function App() {
 				<Route
 					path="accessories/update/:id"
 					element={<AdminAccessoryUpdate />}
+				/>
+				<Route
+					path="game"
+					element={<AdminGame />}
+				/>
+				<Route
+					path="reports"
+					element={<AdminReports />}
+				/>
+				<Route
+					path="reports/:id"
+					element={<AdminReport />}
 				/>
 			</Route>
 

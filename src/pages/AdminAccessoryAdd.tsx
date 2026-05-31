@@ -56,6 +56,11 @@ const AdminAccessoryAdd: React.FC = () => {
 			</div>
 
 			<div className="admin-form-container">
+				<p className="form-validation-info">
+					* Името на аксесоара е задължително и трябва да бъде уникално.<br />
+					* Типът на аксесоара и изтичащата дата са задължителни.<br />
+					* Цената трябва да бъде естествено число.
+				</p>
 				<form
 					className="admin-form"
 					id="accessory-form"

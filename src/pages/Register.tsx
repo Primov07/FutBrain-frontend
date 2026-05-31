@@ -1,9 +1,11 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { toast } from "react-toastify";
 import { BASE_URL } from '.';
 
 const Register: React.FC = () => {
+
+  const navigate = useNavigate();
 
   const handleRegister = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -19,7 +21,10 @@ const Register: React.FC = () => {
       body: JSON.stringify(object)
     });
     if (!response.ok) toast.error("Грешка при регистрация!");
-    toast.success("Вие се регистрирахте успешно!");
+    else {
+      toast.success("Вие се регистрирахте успешно!");
+      navigate("/login");
+    }
   }
   return (
     <div className="auth-container">

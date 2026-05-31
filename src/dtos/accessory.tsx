@@ -3,7 +3,7 @@ export interface AccessoryDTO {
 	name: string;
 	photo: string;
 	price: number;
-	endDate: string;
+	endDate: Date;
 	type: number;
 }
 

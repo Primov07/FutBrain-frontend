@@ -29,7 +29,6 @@ const AdminAccessoryUpdate: React.FC = () => {
 					setType(accessory.type);
 					setImagePreview(accessory.photo);
 					
-					// Format date to YYYY-MM-DD for input[type="date"]
 					const date = new Date(accessory.endDate);
 					const formattedDate = date.toISOString().split("T")[0];
 					setEndDate(formattedDate);
@@ -59,7 +58,7 @@ const AdminAccessoryUpdate: React.FC = () => {
 		return () => URL.revokeObjectURL(objectUrl);
 	}, [image]);
 
-	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+	const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
 		e.preventDefault();
 
 		const formData: FormData = new FormData(e.currentTarget);
@@ -67,6 +66,7 @@ const AdminAccessoryUpdate: React.FC = () => {
 
 		try {
 			const res = await fetch(`${BASE_URL}/accessories/`, {
+				credentials: "include",
 				method: "PUT",
 				body: formData,
 			});
@@ -92,6 +92,11 @@ const AdminAccessoryUpdate: React.FC = () => {
 			</div>
 
 			<div className="admin-form-container">
+				<p className="form-validation-info">
+					* Името на аксесоара е задължително и трябва да бъде уникално.<br />
+					* Типът на аксесоара и изтичащата дата са задължителни.<br />
+					* Цената трябва да бъде естествено число.
+				</p>
 				<form
 					className="admin-form"
 					id="accessory-form"
@@ -180,8 +185,11 @@ const AdminAccessoryUpdate: React.FC = () => {
 						>
 							{imagePreview ?
 								<img
-									src={imagePreview}
+									src={imagePreview.startsWith('http') ? imagePreview : `${BASE_URL}/accessory.png`}
 									alt="Преглед на снимката"
+									onError={(e) => {
+										(e.target as HTMLImageElement).src = '/img/logo.png';
+									}}
 								/>
 							:	<p>Няма снимка</p>}
 						</div>

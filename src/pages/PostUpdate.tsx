@@ -1,16 +1,45 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useAuth } from "../auth/AuthContext";
 import { BASE_URL } from ".";
+import type { PostDTO } from "../dtos/post";
 
-const PostAdd: React.FC = () => {
+const PostUpdate: React.FC = () => {
+	const { id } = useParams<{ id: string }>();
 	const { user } = useAuth();
 	const [title, setTitle] = useState("");
 	const [content, setContent] = useState("");
-    const [file, setFile] = useState<File | null>(null);
-	const [isLoading, setIsLoading] = useState(false);
+	const [isLoading, setIsLoading] = useState(true);
+	const [isUpdating, setIsUpdating] = useState(false);
 	const navigate = useNavigate();
+
+	useEffect(() => {
+		const fetchPost = async () => {
+			try {
+				const response = await fetch(`${BASE_URL}/posts/${id}`);
+				if (!response.ok) throw new Error("Публикацията не е намерена.");
+				const data: PostDTO = await response.json();
+				
+				// Проверка дали текущият потребител е собственик
+				if (user?.id !== data.user.id && !user?.isAdmin) {
+					toast.error("Нямате право да редактирате тази публикация.");
+					navigate("/posts");
+					return;
+				}
+
+				setTitle(data.title || "");
+				setContent(data.content);
+			} catch (err) {
+				toast.error((err as any).message);
+				navigate("/posts");
+			} finally {
+				setIsLoading(false);
+			}
+		};
+
+		if (id && user) fetchPost();
+	}, [id, user, navigate]);
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
@@ -20,43 +49,43 @@ const PostAdd: React.FC = () => {
 			return;
 		}
 
-		setIsLoading(true);
-
-        const formData = new FormData();
-        formData.append("title", title);
-        formData.append("content", content);
-        formData.append("user", user?.id || "");
-        if (file) {
-            formData.append("postImg", file);
-        }
+		setIsUpdating(true);
 
 		try {
 			const response = await fetch(`${BASE_URL}/posts`, {
-				credentials: "include",
-				method: "POST",
-				body: formData
+				method: "PUT",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify({
+					id,
+					title,
+					content,
+				}),
 			});
 
 			const data = await response.json();
 
 			if (response.ok) {
-				toast.success("Публикацията беше създадена успешно!");
-				navigate("/posts");
+				toast.success("Публикацията беше обновена успешно!");
+				navigate(`/post/${id}`);
 			} else {
-				toast.error(data.message);
+				toast.error(data.message || "Грешка при обновяване.");
 			}
 		} catch (error) {
 			console.error("Грешка:", error);
 			toast.error("Възникна неочаквана грешка.");
 		} finally {
-			setIsLoading(false);
+			setIsUpdating(false);
 		}
 	};
+
+	if (isLoading) return <div className="admin-content">Зареждане...</div>;
 
 	return (
 		<div className="container">
 			<div className="section-header">
-				<h2>Създай нова публикация</h2>
+				<h2>Редактирай публикация</h2>
 			</div>
 
 			<div className="admin-form-container" style={{ maxWidth: "100%", marginTop: "20px" }}>
@@ -70,17 +99,6 @@ const PostAdd: React.FC = () => {
 							onChange={(e) => setTitle(e.target.value)}
 							placeholder="Въведете заглавие на публикацията..."
 							required
-						/>
-					</div>
-
-                    <div className="form-group">
-						<label htmlFor="photo">Снимка към публикацията (не е задължителна)</label>
-						<input
-							type="file"
-							id="photo"
-                            accept="image/*"
-							onChange={(e) => setFile(e.target.files?.[0] || null)}
-                            style={{ padding: '10px 0' }}
 						/>
 					</div>
 
@@ -101,14 +119,14 @@ const PostAdd: React.FC = () => {
 						<button
 							type="submit"
 							className="btn-save"
-							disabled={isLoading}
+							disabled={isUpdating}
 						>
-							{isLoading ? "Публикуване..." : "Публикувай"}
+							{isUpdating ? "Обновяване..." : "Запази промените"}
 						</button>
 						<button
 							type="button"
 							className="btn-cancel"
-							onClick={() => navigate("/posts")}
+							onClick={() => navigate(`/post/${id}`)}
 						>
 							Отказ
 						</button>
@@ -119,4 +137,4 @@ const PostAdd: React.FC = () => {
 	);
 };
 
-export default PostAdd;
+export default PostUpdate;

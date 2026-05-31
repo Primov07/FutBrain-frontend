@@ -8,6 +8,8 @@ const accessoriesUrl = `${BASE_URL}/accessories`;
 
 const AdminAccessories: React.FC = () => {
 	const [accessories, setAccessories] = React.useState<AccessoryDTO[]>([]);
+	const [searchQuery, setSearchQuery] = React.useState("");
+	const [isLoading, setIsLoading] = React.useState(true);
 	const navigate = useNavigate();
 
 	React.useEffect(() => {
@@ -15,14 +17,19 @@ const AdminAccessories: React.FC = () => {
 			.then((response) => response.json())
 			.then((data: AccessoryDTO[]) => {
 				setAccessories(data);
+				setIsLoading(false);
 			})
-			.catch((err) => console.error(err));
+			.catch((err) => {
+				console.error(err);
+				setIsLoading(false);
+			});
 	}, []);
 
 	async function deleteAccessory(id: string) {
 		if (window.confirm("Сигурни ли сте, че искате да изтриете този аксесоар?")) {
 			try {
 				const response = await fetch(`${accessoriesUrl}/${id}`, {
+					credentials: "include",
 					method: "DELETE",
 				});
 				if (response.ok) {
@@ -51,11 +58,27 @@ const AdminAccessories: React.FC = () => {
 		}
 	};
 
+	const filteredAccessories = accessories.filter(a => 
+		a.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+		getTypeName(a.type).toLowerCase().includes(searchQuery.toLowerCase())
+	);
+
+	if (isLoading) return <div className="admin-content">Зареждане...</div>;
+
 	return (
 		<section className="data-section">
 			<div className="section-header">
 				<h2>Управление на аксесоари (Магазин)</h2>
 				<div className="header-actions">
+					<div className="header-search">
+						<i className="fas fa-search"></i>
+						<input 
+							type="text" 
+							placeholder="Търси аксесоар..." 
+							value={searchQuery}
+							onChange={(e) => setSearchQuery(e.target.value)}
+						/>
+					</div>
 					<Link to="/admin/accessories/add" className="btn-add">
 						<i className="fas fa-plus"></i> Добави нов аксесоар
 					</Link>
@@ -74,11 +97,13 @@ const AdminAccessories: React.FC = () => {
 						</tr>
 					</thead>
 					<tbody>
-						{accessories.length > 0 ? (
-							accessories.map((a) => (
+						{filteredAccessories.length > 0 ? (
+							filteredAccessories.map((a) => (
 								<tr key={a.id}>
 									<td>
-										<img src={a.photo} alt={a.name} className="table-img" />
+										<img src={a.photo.startsWith('http') ? a.photo : `${BASE_URL}${a.photo.replace('..', '')}`} alt={a.name} className="table-img" 
+											onError={(e) => { (e.target as HTMLImageElement).src = '/img/logo.png'; }}
+										/>
 									</td>
 									<td>{a.name}</td>
 									<td>{getTypeName(a.type)}</td>

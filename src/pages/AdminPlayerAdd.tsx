@@ -76,6 +76,9 @@ const AdminPlayerAdd: React.FC = () => {
 			</div>
 
 			<div className="admin-form-container">
+				<p className="form-validation-info">
+					* Име на играча и снимка са задължителни.
+				</p>
 				<form
 					className="admin-form"
 					id="player-form"

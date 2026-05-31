@@ -11,5 +11,8 @@ export interface UserDTO {
 	likedComments: string[];
 	replies: string[];
 	likedReplies: string[];
-	accessories: string[];
+	accessories: {
+		id: string;
+		photo: string;
+	}[];
 }

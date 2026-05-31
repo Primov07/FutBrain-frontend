@@ -104,6 +104,9 @@ const AdminPlayerUpdate: React.FC = () => {
 			</div>
 
 			<div className="admin-form-container">
+				<p className="form-validation-info">
+					* Име на играча и снимка са задължителни.
+				</p>
 				<form
 					className="admin-form"
 					id="player-form"
@@ -126,7 +129,6 @@ const AdminPlayerUpdate: React.FC = () => {
 						<label htmlFor="player-club">Клуб</label>
 						<select
 							id="player-club"
-							required
 							value={selectedClub?.name || ""}
 							name="club"
 							onChange={handleClubChange}
