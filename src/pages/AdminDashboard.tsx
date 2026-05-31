@@ -2,10 +2,10 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { BASE_URL } from ".";
 
-const playersUrl = `${BASE_URL}/players/count`;
-const usersUrl = `${BASE_URL}/users/count`;
-const postsCountUrl = `${BASE_URL}/posts/count`;
-const reportsCountUrl = `${BASE_URL}/reports/count`;
+const playersUrl = `${BASE_URL}players/count`;
+const usersUrl = `${BASE_URL}users/count`;
+const postsCountUrl = `${BASE_URL}posts/count`;
+const reportsCountUrl = `${BASE_URL}reports/count`;
 
 const AdminDashboard: React.FC = () => {
 	const [usersCount, setUsersCount] = React.useState<number>(0);
