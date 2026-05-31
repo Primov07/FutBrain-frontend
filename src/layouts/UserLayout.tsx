@@ -32,7 +32,7 @@ const UserLayout: React.FC = () => {
       <header>
         <div className="nav-container">
           <Link id="home" to="/" onClick={() => setIsMobileNavOpen(false)}>
-            <img id="logo" src="/img/logo.png" alt="FutBrain лого" />
+            <img id="logo" src="img/logo.png" alt="FutBrain лого" />
           </Link>
           
           <button 
@@ -92,7 +92,7 @@ const UserLayout: React.FC = () => {
                     alt={user.username} 
                     className="user-avatar-header" 
                     onError={(e) => {
-                      (e.target as HTMLImageElement).src = '/img/logo.png';
+                      (e.target as HTMLImageElement).src = 'img/logo.png';
                     }}
                   />
                   <div className="user-details-header">
@@ -132,7 +132,7 @@ const UserLayout: React.FC = () => {
       <footer>
         <div className="footer-content">
           <div className="footer-logo">
-            <img src="/img/logo.png" alt="FutBrain лого" />
+            <img src="img/logo.png" alt="FutBrain лого" />
             <p>Твоята футболна общност.</p>
           </div>
           <div className="footer-links">
