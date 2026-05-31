@@ -95,70 +95,111 @@ const CommentSection: React.FC<{ postId: string }> = ({ postId }) => {
 };
 
 const ReplySection: React.FC<{ commentId: string }> = ({ commentId }) => {
-  const { user } = useAuth();
-  const [replies, setReplies] = React.useState<ReplyDTO[]>([]);
-  const [page, setPage] = React.useState(1);
-  const [hasMore, setHasMore] = React.useState(true);
-  const [show, setShow] = React.useState(false);
-  const [showForm, setShowForm] = React.useState(false);
-  const [content, setContent] = React.useState('');
+	const { user } = useAuth();
+	const [replies, setReplies] = React.useState<ReplyDTO[]>([]);
+	// @ts-ignore
+	const [page, setPage] = React.useState(1);
+	const [hasMore, setHasMore] = React.useState(true);
+	const [show, setShow] = React.useState(false);
+	const [showForm, setShowForm] = React.useState(false);
+	const [content, setContent] = React.useState("");
 
-  const fetchReplies = async (pageNum: number) => {
-    try {
-      const response = await fetch(`${BASE_URL}/replies/comment/${commentId}?page=${pageNum}`);
-      const data: ReplyDTO[] = await response.json();
-      if (data.length < 5) setHasMore(false);
-      setReplies((prev) => [...prev, ...data]);
-    } catch (err) {
-      toast.error("Грешка при зареждане на отговорите");
-    }
-  };
+	const fetchReplies = async (pageNum: number) => {
+		try {
+			const response = await fetch(
+				`${BASE_URL}/replies/comment/${commentId}?page=${pageNum}`,
+			);
+			const data: ReplyDTO[] = await response.json();
+			if (data.length < 5) setHasMore(false);
+			setReplies((prev) => [...prev, ...data]);
+		} catch (err) {
+			toast.error("Грешка при зареждане на отговорите");
+		}
+	};
 
-  const handleCreateReply = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!user) return toast.error("Трябва да сте регистрирани!");
-    try {
-      const response = await fetch(`${BASE_URL}/replies`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ content, user: user.id, comment: commentId })
-      });
-      if (response.ok) {
-        toast.success("Отговорът е добавен!");
-        setContent('');
-        setShowForm(false);
-        setReplies([]);
-        setPage(1);
-        fetchReplies(1);
-      }
-    } catch (err) {
-      toast.error("Грешка при добавяне");
-    }
-  };
+	const handleCreateReply = async (e: React.FormEvent) => {
+		e.preventDefault();
+		if (!user) return toast.error("Трябва да сте регистрирани!");
+		try {
+			const response = await fetch(`${BASE_URL}/replies`, {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({ content, user: user.id, comment: commentId }),
+			});
+			if (response.ok) {
+				toast.success("Отговорът е добавен!");
+				setContent("");
+				setShowForm(false);
+				setReplies([]);
+				setPage(1);
+				fetchReplies(1);
+			}
+		} catch (err) {
+			toast.error("Грешка при добавяне");
+		}
+	};
 
-  const toggle = () => {
-    if (!show && replies.length === 0) fetchReplies(1);
-    setShow(!show);
-  };
+	const toggle = () => {
+		if (!show && replies.length === 0) fetchReplies(1);
+		setShow(!show);
+	};
 
-  return (
-    <div className="replies-section">
-      <button className="btn-action" onClick={toggle}>Отговори ({replies.length})</button>
-      {user && <button className="btn-action" onClick={() => setShowForm(!showForm)}>{showForm ? 'Откажи' : 'Отговори'}</button>}
-      {showForm && (
-        <form className="comment-form" onSubmit={handleCreateReply}>
-          <textarea value={content} onChange={(e) => setContent(e.target.value)} required />
-          <button className="btn-action" type="submit">Изпрати</button>
-        </form>
-      )}
-      {show && (
-        <>
-          {replies.map((reply) => <div key={reply.id} className="reply">{reply.content}</div>)}
-          {hasMore && <button className="btn-action" onClick={() => setPage(p => p + 1)}>Още отговори</button>}
-        </>
-      )}
-    </div>
-  );
+	return (
+		<div className="replies-section">
+			<button
+				className="btn-action"
+				onClick={toggle}
+			>
+				Отговори ({replies.length})
+			</button>
+			{user && (
+				<button
+					className="btn-action"
+					onClick={() => setShowForm(!showForm)}
+				>
+					{showForm ? "Откажи" : "Отговори"}
+				</button>
+			)}
+			{showForm && (
+				<form
+					className="comment-form"
+					onSubmit={handleCreateReply}
+				>
+					<textarea
+						value={content}
+						onChange={(e) => setContent(e.target.value)}
+						required
+					/>
+					<button
+						className="btn-action"
+						type="submit"
+					>
+						Изпрати
+					</button>
+				</form>
+			)}
+			{show && (
+				<>
+					{replies.map((reply) => (
+						<div
+							key={reply.id}
+							className="reply"
+						>
+							{reply.content}
+						</div>
+					))}
+					{hasMore && (
+						<button
+							className="btn-action"
+							onClick={() => setPage((p) => p + 1)}
+						>
+							Още отговори
+						</button>
+					)}
+				</>
+			)}
+		</div>
+	);
 };
 
 const Posts: React.FC = () => {

@@ -1,10 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { BASE_URL, type AccessoryDTO, type PlayerDTO } from ".";
+import { BASE_URL } from ".";
 
 const playersUrl = `${BASE_URL}/players/count`;
 const usersUrl = `${BASE_URL}/users/count`;
-const postsUrl = `${BASE_URL}/posts`;
 
 const AdminDashboard: React.FC = () => {
 	const [usersCount, setUsersCount] = React.useState<number>(0);
