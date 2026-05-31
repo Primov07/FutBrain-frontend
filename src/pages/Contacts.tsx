@@ -25,7 +25,7 @@ const Contacts: React.FC = () => {
 
     setIsSubmitting(true);
     try {
-      const response = await fetch(`${BASE_URL}/contact`, {
+      const response = await fetch(`${BASE_URL}contact`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData)

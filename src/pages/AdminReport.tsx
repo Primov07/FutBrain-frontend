@@ -21,7 +21,7 @@ const AdminReport: React.FC = () => {
 
     const fetchReport = async () => {
         try {
-            const response = await fetch(`${BASE_URL}/reports/${id}`, {
+            const response = await fetch(`${BASE_URL}reports/${id}`, {
                 credentials: 'include',
             });
             if (!response.ok) throw new Error('Грешка при зареждане на доклада.');
@@ -38,7 +38,7 @@ const AdminReport: React.FC = () => {
         if (!window.confirm(`Сигурни ли сте, че искате да ${action === 'Approve' ? 'ОДОБРИТЕ' : 'ОТХВЪРЛИТЕ'} този доклад?`)) return;
 
         try {
-            const response = await fetch(`${BASE_URL}/reports/${id}/resolve`, {
+            const response = await fetch(`${BASE_URL}reports/${id}/resolve`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ action }),

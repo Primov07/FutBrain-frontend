@@ -14,7 +14,7 @@ const Login: React.FC = () => {
 		const formData: FormData = new FormData(e.currentTarget);
 		const object = Object.fromEntries(formData.entries());
 
-		const response = await fetch(`${BASE_URL}/users/login`, {
+		const response = await fetch(`${BASE_URL}users/login`, {
 			credentials: "include",
 			method: "POST",
 			headers: {

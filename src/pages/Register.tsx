@@ -13,7 +13,7 @@ const Register: React.FC = () => {
     const formData = new FormData(e.currentTarget);
     const object = Object.fromEntries(formData.entries());
 
-    const response = await fetch(`${BASE_URL}/users/register`, {
+    const response = await fetch(`${BASE_URL}users/register`, {
       method: "POST",
       headers: {
         'Content-Type': 'application/json'

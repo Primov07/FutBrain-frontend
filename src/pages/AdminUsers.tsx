@@ -3,7 +3,7 @@ import { toast } from 'react-toastify';
 import { BASE_URL } from '.';
 import type { UserDTO } from '../dtos/user';
 
-const usersUrl = `${BASE_URL}/users`;
+const usersUrl = `${BASE_URL}users`;
 
 const AdminUsers: React.FC = () => {
   const [users, setUsers] = React.useState<UserDTO[]>([]);
@@ -98,9 +98,10 @@ const AdminUsers: React.FC = () => {
                 <tr key={user.id}>
                   <td>
                     <img 
-                      src={user.pictureURL || '/img/logo.png'} 
+                      src={`${BASE_URL}${user.pictureURL}`} 
                       alt="User" 
                       className="table-img user-avatar-circle" 
+                      onError={(e) => { (e.target as HTMLImageElement).src = 'img/logo.png'; }}
                     />
                   </td>
                   <td>{user.username}</td>

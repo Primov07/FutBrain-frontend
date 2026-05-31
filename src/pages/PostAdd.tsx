@@ -31,7 +31,7 @@ const PostAdd: React.FC = () => {
         }
 
 		try {
-			const response = await fetch(`${BASE_URL}/posts`, {
+			const response = await fetch(`${BASE_URL}posts`, {
 				credentials: "include",
 				method: "POST",
 				body: formData

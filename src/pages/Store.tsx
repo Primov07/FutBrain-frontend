@@ -19,9 +19,9 @@ const Store: React.FC = () => {
 			setIsLoading(true);
 			try {
 				const [accRes, userAccRes] = await Promise.all([
-					fetch(`${BASE_URL}/accessories`),
+					fetch(`${BASE_URL}accessories`),
 					user ?
-						fetch(`${BASE_URL}/accessories/user/${user.id}`)
+						fetch(`${BASE_URL}accessories/user/${user.id}`)
 					:	Promise.resolve({ json: () => [], ok: true } as any),
 				]);
 
@@ -97,7 +97,7 @@ const Store: React.FC = () => {
 		}
 
 		try {
-			const response = await fetch(`${BASE_URL}/accessories/buy`, {
+			const response = await fetch(`${BASE_URL}accessories/buy`, {
 				credentials: "include",
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
@@ -163,9 +163,10 @@ const Store: React.FC = () => {
 							>
 								{acc.photo ?
 									<img
-										src={`${BASE_URL}/accessories/${acc.id}.webp`}
+										src={`${BASE_URL}${acc.photo}`}
 										alt={acc.name}
 										style={{ maxWidth: "100%", maxHeight: "100%" }}
+										onError={(e) => { (e.target as HTMLImageElement).src = 'img/logo.png'; }}
 									/>
 								:	<i
 										className={`${getIcon(acc.type)} ${acc.type === 1 ? "text-white" : ""}`}

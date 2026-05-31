@@ -47,7 +47,7 @@ const Home: React.FC = () => {
           <p>Присъедини се към най-страстната общност от футболни фенове. Обсъждай, анализирай и играй.</p>
         </div>
         <div className="hero-image">
-          <img src="/img/Football_Transparent_Image.png" alt="Футболна топка" />
+          <img src="img/Football_Transparent_Image.png" alt="Футболна топка" />
         </div>
       </section>
 
@@ -62,9 +62,10 @@ const Home: React.FC = () => {
               <article className="post-card">
                 <div className="post-header">
                   <img 
-                    src={post.user?.pictureURL || '/img/logo.png'} 
+                    src={`${BASE_URL}${post.user?.pictureURL}`} 
                     alt="Потребител" 
                     className="user-avatar" 
+                    onError={(e) => { (e.target as HTMLImageElement).src = 'img/logo.png'; }}
                   />
                   <span className="user-name">{post.user?.username || 'Unknown'}</span>
                   <span className="post-date">{new Date(post.publishDate).toLocaleDateString('bg-BG', { day: '2-digit', month: '2-digit', year: 'numeric' })}</span>
@@ -97,7 +98,11 @@ const Home: React.FC = () => {
           {players.map(player => (
             <div key={player.id} className="player-card">
               <div className="player-img-container">
-                <img src={player.playerImg} alt={player.name} />
+                <img 
+                  src={`${BASE_URL}${player.playerImg}`} 
+                  alt={player.name} 
+                  onError={(e) => { (e.target as HTMLImageElement).src = 'img/logo.png'; }}
+                />
               </div>
               <h4>{player.name}</h4>
               <p>{player.club}</p>

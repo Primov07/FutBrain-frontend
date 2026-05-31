@@ -74,10 +74,10 @@ const CommentSection: React.FC<{ postId: string }> = ({ postId }) => {
             <div className="comment-header">
                <div className="comment-user-info">
                  <img 
-                   src={comment.user.pictureURL?.startsWith('http') ? comment.user.pictureURL : `${BASE_URL}/user.png`} 
+                   src={`${BASE_URL}${comment.user.pictureURL}`} 
                    alt={comment.user.username} 
                    className="comment-avatar"
-                   onError={(e) => { (e.target as HTMLImageElement).src = '/img/logo.png'; }}
+                   onError={(e) => { (e.target as HTMLImageElement).src = 'img/logo.png'; }}
                  />
                  <span className="comment-username">{comment.user.username}</span>
                </div>
@@ -277,20 +277,37 @@ const Posts: React.FC = () => {
 
   React.useEffect(() => {
     setIsLoading(true);
-    Promise.all([
-      fetch(postsUrl).then(res => res.json()),
-      fetch(playersUrl).then(res => res.json()),
-      fetch(clubsUrl).then(res => res.json())
-    ]).then(([postsData, playersData, clubsData]) => {
-      setPosts(postsData);
-      setPlayers([...playersData].sort((a, b) => a.name.localeCompare(b.name)));
-      setClubs([...clubsData].sort((a, b) => a.name.localeCompare(b.name)));
-      setIsLoading(false);
-    }).catch((err) => {
-      toast.error((err as any).message);
-      setIsLoading(false);
-    });
-  }, []);
+    
+    const fetchData = async () => {
+      try {
+        const [postsRes, playersRes, clubsRes] = await Promise.all([
+          fetch(postsUrl),
+          fetch(playersUrl),
+          fetch(clubsUrl)
+        ]);
+
+        const postsData = await postsRes.json();
+        const playersData = await playersRes.json();
+        const clubsData = await clubsRes.json();
+
+        if (!postsRes.ok) throw new Error(postsData.message || "Грешка при зареждане на публикациите");
+        if (!playersRes.ok) throw new Error(playersData.message || "Грешка при зареждане на играчите");
+        if (!clubsRes.ok) throw new Error(clubsData.message || "Грешка при зареждане на отборите");
+
+        setPosts(Array.isArray(postsData) ? postsData : []);
+        setPlayers(Array.isArray(playersData) ? [...playersData].sort((a, b) => a.name.localeCompare(b.name)) : []);
+        setClubs(Array.isArray(clubsData) ? [...clubsData].sort((a, b) => a.name.localeCompare(b.name)) : []);
+        
+      } catch (err: any) {
+        toast.error(err.message || "Грешка при комуникация със сървъра");
+        console.error("Fetch error:", err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [postsUrl, playersUrl, clubsUrl]);
 
   const handleLikePost = async (postId: string) => {
     if (!user) return toast.error("Трябва да сте влезли в профила си!");
@@ -477,10 +494,10 @@ const Posts: React.FC = () => {
               <article key={post.id} className="post-card">
                 <div className="post-header" onClick={() => navigate(`/post/${post.id}`)} style={{ cursor: 'pointer' }}>
                   <img 
-                    src={post.user.pictureURL?.startsWith('http') ? post.user.pictureURL : `${BASE_URL}/user.png`} 
+                    src={`${BASE_URL}${post.user.pictureURL}`} 
                     alt={post.user.username} 
                     className="user-avatar"
-                    onError={(e) => { (e.target as HTMLImageElement).src = '/img/logo.png'; }}
+                    onError={(e) => { (e.target as HTMLImageElement).src = 'img/logo.png'; }}
                   />
                   <Link to={`/profile/${post.user.username}`} className="user-name">{post.user.username}</Link>
                   <span className="post-date">{new Date(post.publishDate).toLocaleDateString('bg-BG')}</span>

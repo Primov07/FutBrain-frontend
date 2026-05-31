@@ -4,8 +4,6 @@ import { toast } from "react-toastify";
 import { BASE_URL } from ".";
 import type { AccessoryDTO } from ".";
 
-const accessoriesUrl = `${BASE_URL}/accessories`;
-
 const AdminAccessories: React.FC = () => {
 	const [accessories, setAccessories] = React.useState<AccessoryDTO[]>([]);
 	const [searchQuery, setSearchQuery] = React.useState("");
@@ -13,7 +11,7 @@ const AdminAccessories: React.FC = () => {
 	const navigate = useNavigate();
 
 	React.useEffect(() => {
-		fetch(accessoriesUrl)
+		fetch(`${BASE_URL}accessories`)
 			.then((response) => response.json())
 			.then((data: AccessoryDTO[]) => {
 				setAccessories(data);
@@ -28,7 +26,7 @@ const AdminAccessories: React.FC = () => {
 	async function deleteAccessory(id: string) {
 		if (window.confirm("Сигурни ли сте, че искате да изтриете този аксесоар?")) {
 			try {
-				const response = await fetch(`${accessoriesUrl}/${id}`, {
+				const response = await fetch(`${BASE_URL}accessories/${id}`, {
 					credentials: "include",
 					method: "DELETE",
 				});
@@ -101,8 +99,8 @@ const AdminAccessories: React.FC = () => {
 							filteredAccessories.map((a) => (
 								<tr key={a.id}>
 									<td>
-										<img src={a.photo.startsWith('http') ? a.photo : `${BASE_URL}${a.photo.replace('..', '')}`} alt={a.name} className="table-img" 
-											onError={(e) => { (e.target as HTMLImageElement).src = '/img/logo.png'; }}
+										<img src={`${BASE_URL}${a.photo}`} alt={a.name} className="table-img" 
+											onError={(e) => { (e.target as HTMLImageElement).src = 'img/logo.png'; }}
 										/>
 									</td>
 									<td>{a.name}</td>

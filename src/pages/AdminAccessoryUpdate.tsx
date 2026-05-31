@@ -20,7 +20,7 @@ const AdminAccessoryUpdate: React.FC = () => {
 		const fetchData = async () => {
 			try {
 				if (id) {
-					const res = await fetch(`${BASE_URL}/accessories/${id}`);
+					const res = await fetch(`${BASE_URL}accessories/${id}`);
 					if (!res.ok) throw new Error("Аксесоарът не е намерен.");
 					const accessory: AccessoryDTO = await res.json();
 
@@ -65,7 +65,7 @@ const AdminAccessoryUpdate: React.FC = () => {
 		formData.append("id", id || "");
 
 		try {
-			const res = await fetch(`${BASE_URL}/accessories/`, {
+			const res = await fetch(`${BASE_URL}accessories/`, {
 				credentials: "include",
 				method: "PUT",
 				body: formData,
@@ -185,10 +185,10 @@ const AdminAccessoryUpdate: React.FC = () => {
 						>
 							{imagePreview ?
 								<img
-									src={imagePreview.startsWith('http') ? imagePreview : `${BASE_URL}/accessory.png`}
+									src={`${imagePreview}`}
 									alt="Преглед на снимката"
 									onError={(e) => {
-										(e.target as HTMLImageElement).src = '/img/logo.png';
+										(e.target as HTMLImageElement).src = 'img/logo.png';
 									}}
 								/>
 							:	<p>Няма снимка</p>}

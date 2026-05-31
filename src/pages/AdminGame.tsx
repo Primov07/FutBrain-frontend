@@ -11,7 +11,7 @@ const AdminGame: React.FC = () => {
 	const fetchGameStatus = React.useCallback(async () => {
 		setIsLoading(true);
 		try {
-			const response = await fetch(`${BASE_URL}/players`);
+			const response = await fetch(`${BASE_URL}players`);
 			if (!response.ok) throw new Error("Грешка при зареждане на данните.");
 			const data: PlayerDTO[] = await response.json();
 
@@ -46,7 +46,7 @@ const AdminGame: React.FC = () => {
 		) {
 			try {
 				setIsLoading(true);
-				const response = await fetch(`${BASE_URL}/players/force-end`, {
+				const response = await fetch(`${BASE_URL}players/force-end`, {
 					method: "POST",
 					credentials: "include",
 				});
@@ -108,7 +108,12 @@ const AdminGame: React.FC = () => {
 											{index === 0 && p.users.length > 0 ? <i className="fas fa-crown" style={{ color: '#ffd700' }}></i> : index + 1}
 										</td>
 										<td>
-											<img src={p.playerImg} alt={p.name} className="table-img" />
+											<img 
+                        src={`${BASE_URL}${p.playerImg || 'img/logo.png'}`} 
+                        alt={p.name} 
+                        className="table-img" 
+                        onError={(e) => { (e.target as HTMLImageElement).src = 'img/logo.png'; }}
+                      />
 										</td>
 										<td style={{ fontWeight: index === 0 ? 'bold' : 'normal' }}>{p.name}</td>
 										<td>{p.club}</td>

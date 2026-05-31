@@ -8,7 +8,7 @@ interface Club {
 	url: string;
 }
 
-const clubsUrl: string = `${BASE_URL}/clubs`;
+const clubsUrl: string = `${BASE_URL}clubs`;
 
 const AdminPlayerAdd: React.FC = () => {
 	const [clubs, setClubs] = React.useState<Club[]>([]);
@@ -55,7 +55,7 @@ const AdminPlayerAdd: React.FC = () => {
 		const formData: FormData = new FormData(e.currentTarget);
 
 		try {
-			const res = await fetch(`${BASE_URL}/players/`, {
+			const res = await fetch(`${BASE_URL}players/`, {
 				credentials: "include",
 				method: "POST",
 				body: formData,
@@ -130,8 +130,9 @@ const AdminPlayerAdd: React.FC = () => {
 						>
 							{selectedClub ?
 								<img
-									src={`${selectedClub.url}`}
+									src={`${BASE_URL}${selectedClub.url}`}
 									alt={`${selectedClub.name}`}
+									onError={(e) => { (e.target as HTMLImageElement).src = 'img/logo.png'; }}
 								/>
 							:	<p>Няма избран клуб</p>}
 						</div>
@@ -164,8 +165,9 @@ const AdminPlayerAdd: React.FC = () => {
 						>
 							{imagePreview ?
 								<img
-									src={imagePreview}
+									src={`${imagePreview}`}
 									alt="Преглед на снимката"
+                  onError={(e) => { (e.target as HTMLImageElement).src = 'img/logo.png'; }}
 								/>
 							:	<p>Няма избрана снимка</p>}
 						</div>

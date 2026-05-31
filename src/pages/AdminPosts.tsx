@@ -95,10 +95,10 @@ const AdminPosts: React.FC = () => {
                   <td>
                     <div className="admin-profile" style={{justifyContent: 'flex-start'}}>
                       <img 
-                        src={p.user.pictureURL.startsWith('http') ? p.user.pictureURL : `${BASE_URL}/uploads/user.png`} 
+                        src={`${BASE_URL}${p.user.pictureURL}`} 
                         className="admin-avatar" 
                         style={{width: '30px', height: '30px'}}
-                        onError={(e) => { (e.target as HTMLImageElement).src = '/img/logo.png'; }}
+                        onError={(e) => { (e.target as HTMLImageElement).src = 'img/logo.png'; }}
                       />
                       <span>{p.user.username}</span>
                     </div>

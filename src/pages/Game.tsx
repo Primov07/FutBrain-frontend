@@ -16,9 +16,9 @@ const Game: React.FC = () => {
     const fetchData = async () => {
       try {
         const [playersRes, voteRes, winnerRes] = await Promise.all([
-          fetch(`${BASE_URL}/players`),
-          user ? fetch(`${BASE_URL}/players/vote/me`, { credentials: "include" }) : Promise.resolve(new Response(JSON.stringify({ ok: false }), { status: 400 })),
-          fetch(`${BASE_URL}/players/winner/last`)
+          fetch(`${BASE_URL}players`),
+          user ? fetch(`${BASE_URL}players/vote/me`, { credentials: "include" }) : Promise.resolve(new Response(JSON.stringify({ ok: false }), { status: 400 })),
+          fetch(`${BASE_URL}players/winner/last`)
         ]);
         
         const playersData = await playersRes.json();
@@ -46,7 +46,7 @@ const Game: React.FC = () => {
     if (!user) return toast.error("Трябва да сте регистрирани, за да гласувате!");
     
     try {
-      const response = await fetch(`${BASE_URL}/players/vote`, {
+      const response = await fetch(`${BASE_URL}players/vote`, {
         credentials: "include",
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -95,10 +95,10 @@ const Game: React.FC = () => {
                         fontSize: '2rem' 
                     }}></i>
                     <img 
-                        src={lastWinner.playerImg} 
+                        src={`${BASE_URL}${lastWinner.playerImg}`} 
                         alt={lastWinner.name} 
                         style={{ width: '150px', height: '150px', borderRadius: '50%', objectFit: 'cover', border: '4px solid #ffd700' }}
-                        onError={(e) => { (e.target as HTMLImageElement).src = '/img/logo.png'; }}
+                        onError={(e) => { (e.target as HTMLImageElement).src = 'img/logo.png'; }}
                     />
                 </div>
                 <div className="winner-info text-center">
@@ -142,19 +142,19 @@ const Game: React.FC = () => {
               <div key={player.id} className="player-card">
                 <div className="player-img-container">
                   <img 
-                    src={player.playerImg} 
+                    src={`${BASE_URL}${player.playerImg}`} 
                     alt={player.name} 
-                    onError={(e) => { (e.target as HTMLImageElement).src = '/img/logo.png'; }}
+                    onError={(e) => { (e.target as HTMLImageElement).src = 'img/logo.png'; }}
                   />
                 </div>
                 <h4>{player.name}</h4>
                 
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', marginBottom: '10px' }}>
                     <img 
-                        src={player.clubImg} 
+                        src={`${BASE_URL}${player.clubImg}`} 
                         alt={player.club} 
                         style={{ width: '20px', height: '20px', objectFit: 'contain' }} 
-                        onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
+                        onError={(e) => { (e.target as HTMLImageElement).src = 'img/logo.png'; }}
                     />
                     <p className="text-primary-blue" style={{ fontSize: '0.9rem', margin: 0, fontWeight: '600' }}>{player.club}</p>
                 </div>

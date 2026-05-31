@@ -19,7 +19,7 @@ const AdminLayout: React.FC = () => {
         <aside className={`admin-sidebar ${isSidebarActive ? 'sidebar-active' : ''}`}>
           <div className="sidebar-header">
             <div className="sidebar-logo-container">
-              <img src="/img/logo.png" alt="FutBrain лого" />
+              <img src="img/logo.png" alt="FutBrain лого" />
               <span>Админ панел</span>
             </div>
             <button className="sidebar-close" onClick={closeSidebar}>
@@ -79,7 +79,7 @@ const AdminLayout: React.FC = () => {
             </div>
             <div className="admin-profile">
               <span className="desktop-only">Добре дошли, <strong>{ user?.username}</strong></span>
-              <img src={user?.pictureURL?.startsWith('http') ? user.pictureURL : `${BASE_URL}/user.png`} alt="Админ" className="admin-avatar" />
+              <img src={`${BASE_URL}${user?.pictureURL}`} alt="Админ" className="admin-avatar" onError={(e) => { (e.target as HTMLImageElement).src = 'img/logo.png'; }} />
             </div>
           </header>
 

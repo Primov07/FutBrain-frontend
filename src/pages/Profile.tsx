@@ -22,14 +22,14 @@ const Profile: React.FC = () => {
       try {
         setLoading(true);
         
-        const responseUser = await fetch(`${BASE_URL}/users/${username}`);
+        const responseUser = await fetch(`${BASE_URL}users/${username}`);
         const jsonUser = await responseUser.json();
         if (!responseUser.ok) {
           throw new Error(jsonUser.message || "Неуспешно зареждане на потребителски данни.");
         }
         setProfileUser(jsonUser);
 
-        const responsePosts = await fetch(`${BASE_URL}/posts/user/${username}?page=${page}&limit=${postsPerPage}`);
+        const responsePosts = await fetch(`${BASE_URL}posts/user/${username}?page=${page}&limit=${postsPerPage}`);
         const jsonPosts = await responsePosts.json();
         console.log(jsonPosts);
         if (!responsePosts.ok) {
@@ -63,11 +63,11 @@ const Profile: React.FC = () => {
       <div className="profile-grid">
         <div className="profile-card">
           <img 
-            src={profileUser.pictureURL?.startsWith('http') ? profileUser.pictureURL : `${BASE_URL}/user.png`} 
+            src={`${BASE_URL}${profileUser.pictureURL || 'img/logo.png'}`} 
             alt={profileUser.username} 
             className="profile-avatar"
             onError={(e) => {
-                (e.target as HTMLImageElement).src = '/img/logo.png'; 
+                (e.target as HTMLImageElement).src = 'img/logo.png'; 
             }}
           />
           {isOwnProfile && (
@@ -84,11 +84,11 @@ const Profile: React.FC = () => {
 										const formData = new FormData();
 										formData.append("avatar", file);
 										//@ts-ignore
-										const response = await fetch(`${BASE_URL}/users/profile`, {
+										const response = await fetch(`${BASE_URL}users/profile`, {
 											credentials: "include",
 											method: "PUT",
 											body: formData,
-										});
+                    });
 									}
 
                 }}
@@ -121,10 +121,10 @@ const Profile: React.FC = () => {
                 profileUser.accessories.map((acc: any) => (
                   <div key={acc.id} className="accessory-card">
                     <img 
-                      src={acc.photo} 
+                      src={`${BASE_URL}${acc.photo}`} 
                       alt="Аксесоар" 
                       className="accessory-photo"
-                      onError={(e) => { (e.target as HTMLImageElement).src = '/img/logo.png'; }}
+                      onError={(e) => { (e.target as HTMLImageElement).src = 'img/logo.png'; }}
                     />
                   </div>
                 ))

@@ -9,7 +9,7 @@ interface Club {
 	url: string;
 }
 
-const clubsUrl: string = `${BASE_URL}/clubs`;
+const clubsUrl: string = `${BASE_URL}clubs`;
 
 const AdminPlayerUpdate: React.FC = () => {
 	const { id } = useParams<{ id: string }>();
@@ -30,7 +30,7 @@ const AdminPlayerUpdate: React.FC = () => {
 				setClubs(clubsData);
 
 				if (id) {
-					const playerRes = await fetch(`${BASE_URL}/players/${id}`);
+					const playerRes = await fetch(`${BASE_URL}players/${id}`);
 					if (!playerRes.ok) throw new Error("Играчът не е намерен.");
 					const player: PlayerDTO = await playerRes.json();
 
@@ -79,7 +79,7 @@ const AdminPlayerUpdate: React.FC = () => {
 		formData.append("id", id || "");
 
 		try {
-			const res = await fetch(`${BASE_URL}/players/`, {
+			const res = await fetch(`${BASE_URL}players/`, {
 				credentials: "include",
 				method: "PUT",
 				body: formData,
@@ -158,8 +158,9 @@ const AdminPlayerUpdate: React.FC = () => {
 						>
 							{selectedClub ?
 								<img
-									src={`${selectedClub.url}`}
+									src={`${BASE_URL}${selectedClub.url}`}
 									alt={`${selectedClub.name}`}
+									onError={(e) => { (e.target as HTMLImageElement).src = 'img/logo.png'; }}
 								/>
 							:	<p>Няма избран клуб</p>}
 						</div>
@@ -194,8 +195,9 @@ const AdminPlayerUpdate: React.FC = () => {
 						>
 							{imagePreview ?
 								<img
-									src={imagePreview}
+									src={`${BASE_URL}${imagePreview}`}
 									alt="Преглед на снимката"
+									onError={(e) => { (e.target as HTMLImageElement).src = 'img/logo.png'; }}
 								/>
 							:	<p>Няма снимка</p>}
 						</div>

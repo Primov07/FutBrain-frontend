@@ -25,7 +25,7 @@ const ReportAdd: React.FC = () => {
 
         setIsSubmitting(true);
         try {
-            const response = await fetch(`${BASE_URL}/reports`, {
+            const response = await fetch(`${BASE_URL}reports`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

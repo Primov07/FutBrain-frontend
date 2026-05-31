@@ -16,10 +16,10 @@ const Rankings: React.FC = () => {
     const fetchData = async () => {
       try {
         const [postsRes, usersRes, commentsRes, repliesRes] = await Promise.all([
-          fetch(`${BASE_URL}/posts`),
-          fetch(`${BASE_URL}/users`),
-          fetch(`${BASE_URL}/comments`),
-          fetch(`${BASE_URL}/replies`)
+          fetch(`${BASE_URL}posts`),
+          fetch(`${BASE_URL}users`),
+          fetch(`${BASE_URL}comments`),
+          fetch(`${BASE_URL}replies`)
         ]);
 
         const posts: PostDTO[] = await postsRes.json();

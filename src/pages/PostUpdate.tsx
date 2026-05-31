@@ -17,7 +17,7 @@ const PostUpdate: React.FC = () => {
 	useEffect(() => {
 		const fetchPost = async () => {
 			try {
-				const response = await fetch(`${BASE_URL}/posts/${id}`);
+				const response = await fetch(`${BASE_URL}posts/${id}`);
 				if (!response.ok) throw new Error("Публикацията не е намерена.");
 				const data: PostDTO = await response.json();
 				
@@ -52,7 +52,7 @@ const PostUpdate: React.FC = () => {
 		setIsUpdating(true);
 
 		try {
-			const response = await fetch(`${BASE_URL}/posts`, {
+			const response = await fetch(`${BASE_URL}posts`, {
 				method: "PUT",
 				headers: {
 					"Content-Type": "application/json",

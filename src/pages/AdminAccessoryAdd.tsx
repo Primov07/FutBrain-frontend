@@ -33,7 +33,7 @@ const AdminAccessoryAdd: React.FC = () => {
 		const formData: FormData = new FormData(e.currentTarget);
 
 		try {
-			const res = await fetch(`${BASE_URL}/accessories/`, {
+			const res = await fetch(`${BASE_URL}accessories`, {
 				credentials: "include",
 				method: "POST",
 				body: formData,
@@ -144,8 +144,9 @@ const AdminAccessoryAdd: React.FC = () => {
 						>
 							{imagePreview ?
 								<img
-									src={imagePreview}
+									src={`${imagePreview}`}
 									alt="Преглед на снимката"
+									onError={(e) => { (e.target as HTMLImageElement).src = 'img/logo.png'; }}
 								/>
 							:	<p>Няма избрана снимка</p>}
 						</div>

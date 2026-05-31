@@ -19,7 +19,7 @@ const AdminReports: React.FC = () => {
     const fetchReports = async () => {
         setIsLoading(true);
         try {
-            const response = await fetch(`${BASE_URL}/reports`, {
+            const response = await fetch(`${BASE_URL}reports`, {
                 credentials: 'include',
             });
             if (!response.ok) throw new Error('Грешка при зареждане на докладите.');
