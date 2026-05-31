@@ -8,7 +8,7 @@ import { AuthProvider } from './auth/AuthContext.tsx'
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
 	<React.StrictMode>
-		<BrowserRouter>
+		<BrowserRouter basename="/FutBrain-frontend">
 			<AuthProvider>
 				<App />
 			</AuthProvider>
